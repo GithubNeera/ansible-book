@@ -150,6 +150,11 @@ PLAY RECAP *********************************************************************
 testserver                 : ok=6    changed=3    unreachable=0    failed=0   
 ```
 
+# ansible-doc
+```log
+ansible-doc service
+```
+
 # vagrant
 ```log
 vagrant reload                                                                                                               master ◼
