@@ -1,3 +1,14 @@
+# 用語
+* Ansibleが知っているホスト群をインベントリと呼ぶ
+* インベントリファイル
+  - ホスト群を記述するデフォルトの方法
+  - localhostはインベントリに自動的に追加される
+    - localhostにはSSH接続はせずに直接接続する
+  - 変数に指定可能なものは論理型と文字列だけ(他ではいろいろ使える)
+  
+  
+## add_host
+## group_by
 # ansible
 ```log
 $ ansible testserver -m ping
@@ -122,6 +133,32 @@ testserver | SUCCESS => {
 }
 ```
 
+```log
+ansible vagrant2 -a "ip addr show dev eth0"                                                              master ✱
+vagrant2 | SUCCESS | rc=0 >>
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 08:00:27:cf:65:24 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.2.15/24 brd 10.0.2.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::a00:27ff:fecf:6524/64 scope link 
+       valid_lft forever preferred_lft forever
+```
+
+
+```log
+ansible all -a "date"
+ansible '*' -a "date"
+
+vagrant1 | SUCCESS | rc=0 >>
+Wed Sep 20 09:38:24 UTC 2017
+
+vagrant2 | SUCCESS | rc=0 >>
+Wed Sep 20 09:38:24 UTC 2017
+
+vagrant3 | SUCCESS | rc=0 >>
+Wed Sep 20 09:38:24 UTC 2017
+```
+
 # ansible-playbook
 ```log
 ansible-playbook web-notls.yml                                                                                             master ✱ ◼
@@ -156,6 +193,12 @@ ansible-doc service
 ```
 
 # vagrant
+* up
+* reload
+* destroy --force
+
+## log
+
 ```log
 vagrant reload                                                                                                               master ◼
 ==> default: Attempting graceful shutdown of VM...
@@ -188,4 +231,23 @@ vagrant reload                                                                  
     default: /vagrant => /Users/d-inoue/workspace/ansible/playbooks
 ==> default: Machine already provisioned. Run `vagrant provision` or use the `--provision`
 ==> default: flag to force provisioning. Provisioners marked to run always will still run.
+```
+
+```log
+vagrant destroy --force
+==> default: Forcing shutdown of VM...
+==> default: Destroying VM and associated drives...
+```
+
+```log
+$ vagrant status                                                                                           master ✱
+Current machine states:
+
+vagrant1                  running (virtualbox)
+vagrant2                  running (virtualbox)
+vagrant3                  running (virtualbox)
+
+This environment represents multiple VMs. The VMs are all listed
+above with their current state. For more information about a specific
+VM, run `vagrant status NAME`.
 ```
