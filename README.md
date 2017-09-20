@@ -11,9 +11,21 @@
 * CPUのアーキテクチャ、OS,IPアドレス、メモリ、ディスクなどのホストの詳細情報のことをファクトという
   - 変数に保存される
 
+## モジュール
+Facts返すモジュール
+* ec2_facts
+* docker
+
 ## add_host
 ## group_by
-# ansible
+* あまり使わないらしい
+
+# ansible コマンド
+* ansible all -m setup
+  - ファクトをすべて出力する
+* ansible vagrant1 -m setup -a 'filter=ansible_eth*'
+  - filter利用
+
 ```log
 $ ansible testserver -m ping
 testserver | SUCCESS => {
