@@ -16,6 +16,15 @@ Facts返すモジュール
 * ec2_facts
 * docker
 
+## 変数の優先順位
+1. ansible-playbook -e var=value
+1. この優先順位欄にないすべての方法？
+1. ホスト or グループに対して利用している定義(インベントリファイル、YAML)
+1. ファクト
+1. ロールのdefaults/main.yml定義
+
+**1(一番上)が最優先**
+
 ## add_host
 ## group_by
 * あまり使わないらしい
@@ -176,6 +185,10 @@ Wed Sep 20 09:38:24 UTC 2017
 ```
 
 # ansible-playbook
+* --list-tasks
+
+## log
+
 ```log
 ansible-playbook web-notls.yml                                                                                             master ✱ ◼
 
@@ -202,6 +215,56 @@ changed: [testserver]
 PLAY RECAP ***********************************************************************************************************************************************
 testserver                 : ok=6    changed=3    unreachable=0    failed=0   
 ```
+
+```log
+ansible-playbook greet.yml -e greeing=hiya
+
+PLAY [pass a message on the command line] **************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [localhost]
+
+TASK [output a message] ********************************************************
+ok: [localhost] => {
+    "msg": "you didn't specify a message"
+}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=2    changed=0    unreachable=0    failed=0   
+
+$ ansible-playbook greet.yml -e @greetvars.yml
+
+PLAY [pass a message on the command line] ******************************************************************************************
+
+TASK [Gathering Facts] *************************************************************************************************************
+ok: [localhost]
+
+TASK [output a message] ************************************************************************************************************
+ok: [localhost] => {
+    "msg": "hiya"
+}
+
+PLAY RECAP *************************************************************************************************************************
+localhost                  : ok=2    changed=0    unreachable=0    failed=0   
+```
+
+```log
+ansible-playbook --list-tasks web-tls.yml                                                            master ✱ ◼
+
+playbook: web-tls.yml
+
+  play #1 (webservers): Configure webserver with nginx	TAGS: []
+    tasks:
+      install nginx	TAGS: []
+      create directories for TLS certificates	TAGS: []
+      copy TLS key	TAGS: []
+      copy TLS certificate	TAGS: []
+      copy nginx config file	TAGS: []
+      enable configuration	TAGS: []
+      copy index.html	TAGS: []
+      restart nginx	TAGS: []
+```
+
 
 # ansible-doc
 ```log
